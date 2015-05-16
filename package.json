@@ -1,0 +1,27 @@
+{
+  "name": "file-history",
+  "version": "1.0.0",
+  "description": "Use GitHub API to get a file's history for each git tag",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "keywords": [
+    "git",
+    "github",
+    "api",
+    "history",
+    "tags"
+  ],
+  "author": "Brent Jackson",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^3.8.0",
+    "moment": "^2.10.3",
+    "semver-compare": "^1.0.0",
+    "superagent": "^1.2.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5"
+  }
+}
