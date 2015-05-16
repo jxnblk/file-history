@@ -35,14 +35,11 @@ history(config, function(arr) {
 
 ## Returned File Object
 
-### `version`
-Semver based on git tag (strips initial `v`)
+- `version` - Semver based on git tag (strips initial `v`)
+- `filepath` - Relative path to file in the repo
+- `content` - File content
 
-### `filepath`
-Relative path to file in the repo
-
-### `content`
-File content
+---
 
 MIT License
 

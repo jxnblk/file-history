@@ -1,7 +1,6 @@
 
 var _ = require('lodash');
 var request = require('superagent');
-var moment = require('moment');
 var semverCompare = require('semver-compare');
 
 module.exports = function(opts, callback) {
