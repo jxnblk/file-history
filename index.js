@@ -26,7 +26,10 @@ module.exports = function(opts, callback) {
     var url = api + opts.repo + '/tags';
     request
       .get(url)
-      .query({ access_token: opts.token })
+      .query({
+        access_token: opts.token,
+        per_page: 100
+      })
       .end(function(err, res) {
         if (err) {
           console.log(err);
