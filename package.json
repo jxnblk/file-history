@@ -1,6 +1,6 @@
 {
   "name": "file-history",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Use GitHub API to get a file's history for each git tag",
   "main": "index.js",
   "scripts": {
