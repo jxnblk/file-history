@@ -19,7 +19,9 @@ module.exports = function(opts, callback) {
   }
 
   opts = _.defaults(opts, {
-    filepaths: ['/README.md']
+    filepaths: ['/README.md'],
+    history: [],
+    per_page: 100,
   });
 
   function getTags() {
@@ -28,7 +30,7 @@ module.exports = function(opts, callback) {
       .get(url)
       .query({
         access_token: opts.token,
-        per_page: 100
+        per_page: opts.per_page
       })
       .end(function(err, res) {
         if (err) {
@@ -39,6 +41,9 @@ module.exports = function(opts, callback) {
         length = tags.length;
         tags.forEach(getContents);
       });
+      //.on('progress', function(e) {
+      //  console.log('Getting tags... ', e.percent);
+      //});
   }
 
   function getFile(tag) {
@@ -52,6 +57,7 @@ module.exports = function(opts, callback) {
       cb = arguments[1];
     }
     var url = api + opts.repo + '/contents' + opts.filepaths[i];
+
     request
       .get(url)
       .query({ ref: tag.commit.sha, access_token: opts.token })
@@ -64,28 +70,41 @@ module.exports = function(opts, callback) {
           cb(err, res, i);
         }
       });
+      //.on('progress', function(e) {
+      //  console.log('Getting file for ' + tag.name + '... ', e.percent);
+      //});
   }
 
   function getContents(tag) {
-    getFile(tag, function(err, res, i) {
-      if (err) {
-        console.log('getFile error', i);
-        history.push({ version: tag.name.replace(/^v/, '') });
-        return false;
-      } else {
-        var obj = JSON.parse(res.text);
-        var buffer = new Buffer(obj.content, 'base64')
-        var content = buffer.toString();
-        history.push({
-          version: tag.name.replace(/^v/, ''),
-          filepath: opts.filepaths[i],
-          content: content 
-        });
-      }
+    var index = _.find(opts.history, function(item) { return item.version === tag.name.replace(/^v/, '') });
+    if (index > -1) {
+      var item = opts.history[index];
+      console.log('Found record for ' + item.version + ' in opts.history');
+      history.push(item);
       if (history.length >= length) {
         done();
       }
-    });
+    } else {
+      getFile(tag, function(err, res, i) {
+        if (err) {
+          console.log('getFile error', i);
+          history.push({ version: tag.name.replace(/^v/, '') });
+          return false;
+        } else {
+          var obj = JSON.parse(res.text);
+          var buffer = new Buffer(obj.content, 'base64')
+          var content = buffer.toString();
+          history.push({
+            version: tag.name.replace(/^v/, ''),
+            filepath: opts.filepaths[i],
+            content: content 
+          });
+        }
+        if (history.length >= length) {
+          done();
+        }
+      });
+    }
   }
 
   function done() {
