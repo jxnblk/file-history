@@ -76,7 +76,7 @@ module.exports = function(opts, callback) {
   }
 
   function getContents(tag) {
-    var index = _.find(opts.history, function(item) { return item.version === tag.name.replace(/^v/, '') });
+    var index = _.findIndex(opts.history, function(item) { return item.version === tag.name.replace(/^v/, '') });
     if (index > -1) {
       var item = opts.history[index];
       console.log('Found record for ' + item.version + ' in opts.history');
